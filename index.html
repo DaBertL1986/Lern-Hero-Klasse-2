@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Lern-Held" />
+  <title>Lern-Held 2. Klasse</title>
+  <style>
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      padding: 16px;
+      min-height: 100vh;
+      background-color: #f4f7fb;
+      background-image:
+        linear-gradient(to right, rgba(148, 163, 184, 0.16) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.16) 1px, transparent 1px),
+        linear-gradient(155deg, #e8f0fe 0%, #fdf8e7 52%, #e6f4ea 100%);
+      background-size: 24px 24px, 24px 24px, 100% 100%;
+      color: #1e293b;
+    }
+    .app {
+      max-width: 720px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
+      border: 1px solid #e2e8f0;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.6rem;
+      text-align: center;
+      color: #3730a3;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    .pill {
+      background: #f1f5f9;
+      padding: 8px 14px;
+      border-radius: 999px;
+    }
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .tab-btn {
+      padding: 12px 10px;
+      font-size: 0.98rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      background: #f8fafc;
+      color: #1e293b;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: #4f46e5;
+      color: #fff;
+    }
+    .mode-selector {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .mode-btn {
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: none;
+      background: #f1f5f9;
+      color: #1e293b;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+    .mode-btn.active {
+      background: #8b5cf6;
+      color: #fff;
+    }
+    .row-selector, .german-cat-selector, .math-extra-selector, .letter-selector, .letter-quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+    .row-btn, .cat-btn, .extra-btn, .letter-btn, .quick-btn {
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #1e293b;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .letter-btn {
+      min-width: 42px;
+      font-size: 1rem;
+    }
+    @media (max-width: 440px) {
+      body {
+        padding: 12px;
+      }
+      .app {
+        padding: 16px 14px;
+        border-radius: 20px;
+      }
+      .letter-selector {
+        gap: 6px;
+      }
+      .letter-btn {
+        min-width: 38px;
+        padding: 7px 9px;
+        font-size: 0.95rem;
+      }
+      .adjust-label {
+        width: 100%;
+        min-width: 0;
+        text-align: center;
+        margin-bottom: 2px;
+      }
+      .german-instruction {
+        font-size: 1.15rem;
+      }
+    }
+    .quick-btn {
+      font-size: 0.88rem;
+      background: #f8fafc;
+    }
+    .quick-btn.active {
+      background: #0ea5e9;
+      color: #ffffff;
+      border-color: #0ea5e9;
+    }
+    .row-btn.active, .letter-btn.active {
+      background: #0ea5e9;
+      color: #ffffff;
+      border-color: #0ea5e9;
+    }
+    .cat-btn.active {
+      background: #4f46e5;
+      color: #ffffff;
+      border-color: #4f46e5;
+    }
+    .cat-btn.special.active,
+    .extra-btn.special.active {
+      background: #eab308;
+      color: #ffffff;
+      border-color: #eab308;
+    }
+    .card {
+      background: #f8fafc;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+    }
+    .question {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin: 10px 0 16px;
+      color: #0f172a;
+    }
+    .hint {
+      font-size: 1rem;
+      color: #475569;
+      margin-bottom: 14px;
+    }
+    .german-instruction {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 16px;
+      line-height: 1.35;
+    }
+    .source-status {
+      display: none;
+    }
+    .adjust-toggle-wrap {
+      max-width: 640px;
+      margin: 0 auto 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+    .mini-btn.active-mode {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+    }
+    .adjust-panel {
+      max-width: 640px;
+      margin: 0 auto 14px;
+      padding: 12px;
+      border-radius: 16px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      font-size: 0.88rem;
+      touch-action: manipulation;
+      position: relative;
+      z-index: 2;
+    }
+    .adjust-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .adjust-row:last-child {
+      margin-bottom: 0;
+    }
+    .adjust-label {
+      font-weight: 700;
+      min-width: 132px;
+      text-align: left;
+    }
+    .mini-btn {
+      padding: 5px 10px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #1e293b;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      touch-action: manipulation;
+      position: relative;
+      z-index: 2;
+    }
+    .mini-btn:hover {
+      background: #eef2ff;
+    }
+    .code-export-box {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.78rem;
+      line-height: 1.4;
+      resize: vertical;
+      min-height: 120px;
+    }
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .num-input {
+      font-size: 1.8rem;
+      padding: 10px 16px;
+      width: 140px;
+      text-align: center;
+      border-radius: 14px;
+      border: none;
+      background: #ffffff;
+      font-weight: 700;
+    }
+    .num-input:focus {
+      outline: none;
+    }
+    .opt-btn, .word-btn, .primary-btn {
+      padding: 14px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      border-radius: 16px;
+      border: none;
+      background: #ffffff;
+      color: #1e293b;
+      cursor: pointer;
+      transition: background-color 0.15s, color 0.15s, opacity 0.15s;
+    }
+    .opt-btn, .opt-btn:hover, .opt-btn:focus, .opt-btn:active {
+      background: #ffffff;
+      color: #1e293b;
+      border: none;
+      outline: none;
+    }
+    .word-btn:hover:not(:disabled) {
+      background: #eef2ff;
+    }
+    .word-btn:disabled {
+      cursor: default;
+      opacity: 0.92;
+    }
+    .opt-btn:focus, .word-btn:focus, .row-btn:focus, .cat-btn:focus, .extra-btn:focus, .mode-btn:focus, .tab-btn:focus, .primary-btn:focus, .reset-btn:focus, .letter-btn:focus, .quick-btn:focus, .mini-btn:focus {
+      outline: none;
+    }
+    .word-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .word-btn.selected {
+      background: #fef08a;
+    }
+    .word-btn.wrong-pick {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .word-btn.missed-right {
+      background: #dcfce7;
+      color: #166534;
+      box-shadow: inset 0 0 0 2px #16a34a;
+    }
+    .primary-btn {
+      background: #16a34a;
+      color: #fff;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .primary-btn.check-btn {
+      width: auto;
+      min-width: 180px;
+      max-width: 240px;
+      padding: 12px 24px;
+      font-size: 1.05rem;
+      display: inline-block;
+    }
+    .primary-btn:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    .letter-pair-preview {
+      display: none;
+    }
+    .canvas-wrap {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto 14px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    #write-canvas {
+      display: block;
+      width: 100%;
+      height: 240px;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      cursor: crosshair;
+    }
+    @media (orientation: landscape) and (max-height: 520px) {
+      body {
+        padding: 10px;
+      }
+      .app {
+        max-width: 100%;
+        padding: 14px;
+      }
+      .canvas-wrap {
+        max-width: 100%;
+        margin-bottom: 10px;
+      }
+      #write-canvas {
+        height: 185px;
+      }
+      .card {
+        padding: 14px;
+      }
+    }
+    .write-actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .secondary-btn {
+      padding: 13px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      border-radius: 16px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #1e293b;
+      cursor: pointer;
+    }
+    .secondary-btn:hover {
+      background: #f1f5f9;
+    }
+    .feedback {
+      margin-top: 16px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      min-height: 28px;
+    }
+    .ok { color: #15803d; }
+    .no { color: #dc2626; }
+    .footer-actions {
+      margin-top: 18px;
+      display: flex;
+      justify-content: center;
+    }
+    .reset-btn {
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: 1px solid #fecaca;
+      background: #fef2f2;
+      color: #991b1b;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+    .reset-btn:hover {
+      background: #fee2e2;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Lern-Held 2. Klasse</h1>
+    <div class="stats">
+      <div class="pill">Sterne: <span id="stars">0</span></div>
+      <div class="pill">Serie: <span id="streak">0</span></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-math" onclick="switchTab('math')">Mathe</button>
+      <button class="tab-btn" id="tab-german" onclick="switchTab('german')">Wörter</button>
+      <button class="tab-btn" id="tab-alphabet" onclick="switchTab('alphabet')">Alphabet</button>
+    </div>
+
+    <div id="math-section">
+      <div class="mode-selector">
+        <button class="mode-btn active" id="mode-choice" onclick="setAnswerMode('choice')">Multiple Choice</button>
+        <button class="mode-btn" id="mode-input" onclick="setAnswerMode('input')">Zahlen-Eingabe</button>
+      </div>
+
+      <div class="row-selector" id="row-selector"></div>
+
+      <div class="math-extra-selector">
+        <button class="extra-btn special" id="btn-mix-pm" onclick="toggleMixPlusMinus()">Gemischt mit +/-</button>
+      </div>
+
+      <div class="card">
+        <div class="hint" id="math-order-info"></div>
+        <div class="question" id="math-question"></div>
+        <div class="hint" id="math-hint"></div>
+
+        <div class="options" id="math-options"></div>
+
+        <div class="input-box" id="math-input-box" style="display:none;">
+          <input type="number" id="math-user-input" class="num-input" placeholder="?" pattern="[0-9]*" inputmode="numeric" />
+          <button class="primary-btn" style="max-width:220px;" onclick="checkMathInput()">Prüfen</button>
+        </div>
+
+        <div class="feedback" id="math-feedback"></div>
+      </div>
+    </div>
+
+    <div id="german-section" style="display:none;">
+      <div class="german-cat-selector" id="german-cat-selector">
+        <button class="cat-btn active" id="cat-namen" onclick="setGermanCategory('namen')">Namenwörter</button>
+        <button class="cat-btn" id="cat-tun" onclick="setGermanCategory('tun')">Tun-Wörter</button>
+        <button class="cat-btn special" id="cat-mix" onclick="setGermanCategory('mix')">Gemischt</button>
+      </div>
+
+      <div class="card">
+        <div class="german-instruction" id="german-instruction"></div>
+        <div class="word-grid" id="german-words"></div>
+        <button class="primary-btn check-btn" id="german-check-btn" onclick="checkGerman()">Antwort prüfen</button>
+        <div class="feedback" id="german-feedback"></div>
+      </div>
+    </div>
+
+    <div id="alphabet-section" style="display:none;">
+      <div class="letter-selector" id="letter-selector"></div>
+
+      <div class="letter-quick-actions">
+        <button class="quick-btn" id="btn-select-all-letters" type="button" onclick="selectAllLetters()">Alle</button>
+        <button class="quick-btn" type="button" onclick="pickRandomLetter()">Zufälliger Buchstabe</button>
+        <input type="file" id="manual-letter-file" accept="image/*" style="display:none;" onchange="handleManualLetterFile(event)" />
+      </div>
+
+      <div class="card">
+        <div class="hint" id="alphabet-selected-info"></div>
+        <div class="source-status" id="alphabet-source-status"></div>
+        <div class="hint" id="alphabet-writing-tip">Handballen-Schutz aktiv: Zweite Berührungen stören den Strich nicht.</div>
+
+        <div class="adjust-toggle-wrap">
+          <button class="mini-btn" id="btn-pen-only" type="button" onclick="togglePenOnlyMode()">Nur Stift: Aus</button>
+          <button class="mini-btn" id="btn-toggle-adjust" type="button" onclick="toggleAdjustPanel()">Feinjustierung einblenden</button>
+        </div>
+
+        <div class="adjust-panel" id="adjust-panel" style="display:none;">
+          <div class="adjust-row">
+            <button class="mini-btn" type="button" onclick="triggerManualImagePicker('upper')">Groß-Bild wählen</button>
+            <button class="mini-btn" id="btn-pick-lower" type="button" onclick="triggerManualImagePicker('lower')">Klein-Bild wählen</button>
+          </div>
+          <div class="adjust-row" id="adjust-row-upper">
+            <span class="adjust-label" id="label-upper-adj">Groß (1.00×, 0px)</span>
+            <button class="mini-btn" type="button" onclick="adjustVariant('upper', 'scale', -0.05)">Größe −</button>
+            <button class="mini-btn" type="button" onclick="adjustVariant('upper', 'scale', 0.05)">Größe +</button>
+            <button class="mini-btn" type="button" onclick="adjustVariant('upper', 'offsetY', -3)">Hoch</button>
+            <button class="mini-btn" type="button" onclick="adjustVariant('upper', 'offsetY', 3)">Runter</button>
+          </div>
+          <div class="adjust-row" id="adjust-row-lower">
+            <span class="adjust-label" id="label-lower-adj">Klein (1.00×, 0px)</span>
+            <button class="mini-btn" type="button" onclick="adjustVariant('lower', 'scale', -0.05)">Größe −</button>
+            <button class="mini-btn" type="button" onclick="adjustVariant('lower', 'scale', 0.05)">Größe +</button>
+            <button class="mini-btn" type="button" onclick="adjustVariant('lower', 'offsetY', -3)">Hoch</button>
+            <button class="mini-btn" type="button" onclick="adjustVariant('lower', 'offsetY', 3)">Runter</button>
+          </div>
+          <div class="adjust-row">
+            <button class="mini-btn" type="button" onclick="resetCurrentLetterAdjustment()">Buchstabe zurücksetzen</button>
+            <button class="mini-btn" type="button" onclick="toggleAndCopyAllAdjustmentsCode()">Code anzeigen &amp; kopieren</button>
+          </div>
+          <textarea id="all-adjustments-code" class="code-export-box" style="display:none;" readonly onclick="this.select()"></textarea>
+        </div>
+
+        <div class="canvas-wrap">
+          <canvas id="write-canvas" width="640" height="240"></canvas>
+        </div>
+
+        <div class="write-actions">
+          <button class="secondary-btn" type="button" onclick="prevAlphabetLetter()">Vorheriger</button>
+          <button class="secondary-btn" type="button" onclick="clearWritingCanvas()">Feld löschen</button>
+          <button id="next-letter-btn" class="secondary-btn" type="button" onclick="handleNextAlphabetLetter()">Nächster</button>
+        </div>
+
+        <div class="feedback" id="alphabet-feedback"></div>
+      </div>
+    </div>
+
+    <div class="footer-actions">
+      <button class="reset-btn" type="button" onclick="resetStarsAndStreak()">Sterne &amp; Serie zurücksetzen</button>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY_ADJUSTMENTS = "lernheld_letter_adjustments_v3";
+
+    let stars = 0;
+    let streak = 0;
+    let activeRows = new Set([2]);
+    let mixPlusMinusEnabled = false;
+    let answerMode = 'choice';
+    let currentAnswer = null;
+    let currentLabel = "";
+
+    let germanCategory = 'namen';
+    let currentGermanTask = null;
+    let mixStep = 0;
+    let selectedWordIndices = new Set();
+    let germanRoundChecked = false;
+    let germanAdvanceTimer = null;
+
+    const alphabetItems = [
+      { key: "A", upper: "A", lower: "a", label: "Aa", hasLower: true },
+      { key: "B", upper: "B", lower: "b", label: "Bb", hasLower: true },
+      { key: "C", upper: "C", lower: "c", label: "Cc", hasLower: true },
+      { key: "D", upper: "D", lower: "d", label: "Dd", hasLower: true },
+      { key: "E", upper: "E", lower: "e", label: "Ee", hasLower: true },
+      { key: "F", upper: "F", lower: "f", label: "Ff", hasLower: true },
+      { key: "G", upper: "G", lower: "g", label: "Gg", hasLower: true },
+      { key: "H", upper: "H", lower: "h", label: "Hh", hasLower: true },
+      { key: "I", upper: "I", lower: "i", label: "Ii", hasLower: true },
+      { key: "J", upper: "J", lower: "j", label: "Jj", hasLower: true },
+      { key: "K", upper: "K", lower: "k", label: "Kk", hasLower: true },
+      { key: "L", upper: "L", lower: "l", label: "Ll", hasLower: true },
+      { key: "M", upper: "M", lower: "m", label: "Mm", hasLower: true },
+      { key: "N", upper: "N", lower: "n", label: "Nn", hasLower: true },
+      { key: "O", upper: "O", lower: "o", label: "Oo", hasLower: true },
+      { key: "P", upper: "P", lower: "p", label: "Pp", hasLower: true },
+      { key: "Qu", upper: "Qu", lower: "qu", label: "Qu qu", hasLower: true },
+      { key: "R", upper: "R", lower: "r", label: "Rr", hasLower: true },
+      { key: "S", upper: "S", lower: "s", label: "Ss", hasLower: true },
+      { key: "T", upper: "T", lower: "t", label: "Tt", hasLower: true },
+      { key: "U", upper: "U", lower: "u", label: "Uu", hasLower: true },
+      { key: "V", upper: "V", lower: "v", label: "Vv", hasLower: true },
+      { key: "W", upper: "W", lower: "w", label: "Ww", hasLower: true },
+      { key: "X", upper: "X", lower: "x", label: "Xx", hasLower: true },
+      { key: "Y", upper: "Y", lower: "y", label: "Yy", hasLower: true },
+      { key: "Z", upper: "Z", lower: "z", label: "Zz", hasLower: true },
+      { key: "ß", upper: "ß", lower: "ß", label: "ß", hasLower: false }
+    ];
+
+    const defaultLetterAdjustments = {
+      "A": { upper: { scale: 0.80, offsetY: 6 }, lower: { scale: 0.75, offsetY: -9 } },
+      "B": { upper: { scale: 0.90, offsetY: 12 }, lower: { scale: 1.25, offsetY: -72 } },
+      "C": { upper: { scale: 0.80, offsetY: 6 }, lower: { scale: 0.60, offsetY: -3 } },
+      "D": { upper: { scale: 0.80, offsetY: 6 }, lower: { scale: 1.15, offsetY: -60 } },
+      "E": { upper: { scale: 0.80, offsetY: 3 }, lower: { scale: 0.65, offsetY: -9 } },
+      "F": { upper: { scale: 0.85, offsetY: 6 }, lower: { scale: 1.15, offsetY: -66 } },
+      "G": { upper: { scale: 1.20, offsetY: 66 }, lower: { scale: 1.15, offsetY: 0 } },
+      "H": { upper: { scale: 0.85, offsetY: 12 }, lower: { scale: 1.25, offsetY: -66 } },
+      "I": { upper: { scale: 0.80, offsetY: 6 }, lower: { scale: 0.80, offsetY: -27 } },
+      "J": { upper: { scale: 1.05, offsetY: 48 }, lower: { scale: 1.30, offsetY: -33 } },
+      "K": { upper: { scale: 0.85, offsetY: 6 }, lower: { scale: 1.25, offsetY: -66 } },
+      "L": { upper: { scale: 0.85, offsetY: 6 }, lower: { scale: 1.15, offsetY: -66 } },
+      "M": { upper: { scale: 0.75, offsetY: 0 }, lower: { scale: 0.65, offsetY: -6 } },
+      "N": { upper: { scale: 0.85, offsetY: 9 }, lower: { scale: 0.65, offsetY: -9 } },
+      "O": { upper: { scale: 0.85, offsetY: 6 }, lower: { scale: 0.60, offsetY: -3 } },
+      "P": { upper: { scale: 0.80, offsetY: 3 }, lower: { scale: 0.95, offsetY: 0 } },
+      "Qu": { upper: { scale: 0.85, offsetY: 9 }, lower: { scale: 1.10, offsetY: -6 } },
+      "R": { upper: { scale: 0.80, offsetY: 3 }, lower: { scale: 0.65, offsetY: -3 } },
+      "S": { upper: { scale: 0.80, offsetY: 3 }, lower: { scale: 0.55, offsetY: 0 } },
+      "T": { upper: { scale: 0.80, offsetY: 0 }, lower: { scale: 1.10, offsetY: -60 } },
+      "U": { upper: { scale: 0.80, offsetY: 3 }, lower: { scale: 0.65, offsetY: -6 } },
+      "V": { upper: { scale: 0.80, offsetY: 0 }, lower: { scale: 0.65, offsetY: -6 } },
+      "W": { upper: { scale: 0.80, offsetY: 0 }, lower: { scale: 0.60, offsetY: -3 } },
+      "X": { upper: { scale: 0.80, offsetY: 6 }, lower: { scale: 0.65, offsetY: -9 } },
+      "Y": { upper: { scale: 1.20, offsetY: 66 }, lower: { scale: 1.00, offsetY: 0 } },
+      "Z": { upper: { scale: 0.80, offsetY: 3 }, lower: { scale: 0.65, offsetY: -9 } },
+      "ß": { upper: { scale: 0.80, offsetY: 3 }, lower: { scale: 0.90, offsetY: 0 } }
+    };
+
+    function loadSavedAdjustments() {
+      const merged = {};
+      for (const item of alphabetItems) {
+        const v = defaultLetterAdjustments[item.key] || {};
+        merged[item.key] = {
+          upper: { scale: Number(v.upper?.scale ?? 1.0), offsetY: Number(v.upper?.offsetY ?? 0) },
+          lower: { scale: Number(v.lower?.scale ?? 1.0), offsetY: Number(v.lower?.offsetY ?? 0) }
+        };
+      }
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_ADJUSTMENTS);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          for (const [k, v] of Object.entries(parsed)) {
+            if (!merged[k]) continue;
+            merged[k] = {
+              upper: {
+                scale: Number(v.upper?.scale ?? merged[k].upper.scale),
+                offsetY: Number(v.upper?.offsetY ?? merged[k].upper.offsetY)
+              },
+              lower: {
+                scale: Number(v.lower?.scale ?? merged[k].lower.scale),
+                offsetY: Number(v.lower?.offsetY ?? merged[k].lower.offsetY)
+              }
+            };
+          }
+        }
+      } catch (e) {}
+      return merged;
+    }
+
+    const letterAdjustments = loadSavedAdjustments();
+
+    function persistAdjustments() {
+      try {
+        localStorage.setItem(STORAGE_KEY_ADJUSTMENTS, JSON.stringify(letterAdjustments));
+      } catch (e) {}
+    }
+
+    function getAdjFor(key, variant) {
+      if (!letterAdjustments[key]) {
+        letterAdjustments[key] = {
+          upper: { scale: 1.0, offsetY: 0 },
+          lower: { scale: 1.0, offsetY: 0 }
+        };
+      }
+      if (!letterAdjustments[key][variant]) {
+        letterAdjustments[key][variant] = { scale: 1.0, offsetY: 0 };
+      }
+      return letterAdjustments[key][variant];
+    }
+
+    function toggleAdjustPanel() {
+      const panel = document.getElementById("adjust-panel");
+      const btn = document.getElementById("btn-toggle-adjust");
+      if (!panel || !btn) return;
+      const isHidden = panel.style.display === "none";
+      panel.style.display = isHidden ? "block" : "none";
+      btn.textContent = isHidden ? "Feinjustierung ausblenden" : "Feinjustierung einblenden";
+    }
+
+    function updateAdjustPanelUI() {
+      const item = getLetterItem(currentLetterKey);
+      const lowerRow = document.getElementById("adjust-row-lower");
+      if (lowerRow) {
+        lowerRow.style.display = item.hasLower ? "flex" : "none";
+      }
+
+      const up = getAdjFor(currentLetterKey, "upper");
+      const low = getAdjFor(currentLetterKey, "lower");
+
+      const upLabel = document.getElementById("label-upper-adj");
+      const lowLabel = document.getElementById("label-lower-adj");
+
+      if (upLabel) {
+        upLabel.textContent = `${item.hasLower ? "Groß" : "Zeichen"} (${up.scale.toFixed(2)}×, ${up.offsetY > 0 ? "+" : ""}${up.offsetY}px)`;
+      }
+      if (lowLabel) {
+        lowLabel.textContent = `Klein (${low.scale.toFixed(2)}×, ${low.offsetY > 0 ? "+" : ""}${low.offsetY}px)`;
+      }
+    }
+
+    function adjustVariant(variant, prop, delta) {
+      const target = getAdjFor(currentLetterKey, variant);
+      if (prop === "scale") {
+        const next = Math.min(2.2, Math.max(0.4, Number((target.scale + delta).toFixed(2))));
+        target.scale = next;
+      } else if (prop === "offsetY") {
+        target.offsetY = Math.min(110, Math.max(-110, Math.round(target.offsetY + delta)));
+      }
+      persistAdjustments();
+      updateAdjustPanelUI();
+      drawWritingTemplate(false);
+    }
+
+    function resetCurrentLetterAdjustment() {
+      const base = defaultLetterAdjustments[currentLetterKey] || {
+        upper: { scale: 1.0, offsetY: 0 },
+        lower: { scale: 1.0, offsetY: 0 }
+      };
+      letterAdjustments[currentLetterKey] = {
+        upper: { scale: base.upper.scale, offsetY: base.upper.offsetY },
+        lower: { scale: base.lower.scale, offsetY: base.lower.offsetY }
+      };
+      persistAdjustments();
+      updateAdjustPanelUI();
+      drawWritingTemplate(false);
+    }
+
+    function buildAllAdjustmentsCodeText() {
+      const lines = ["const defaultLetterAdjustments = {"];
+      alphabetItems.forEach((item, idx) => {
+        const k = item.key;
+        const u = getAdjFor(k, "upper");
+        const l = getAdjFor(k, "lower");
+        const comma = idx < alphabetItems.length - 1 ? "," : "";
+        lines.push(
+          `  "${k}": { upper: { scale: ${u.scale.toFixed(2)}, offsetY: ${u.offsetY} }, lower: { scale: ${l.scale.toFixed(2)}, offsetY: ${l.offsetY} } }${comma}`
+        );
+      });
+      lines.push("};");
+      return lines.join("\n");
+    }
+
+    function toggleAndCopyAllAdjustmentsCode() {
+      const codeText = buildAllAdjustmentsCodeText();
+      const box = document.getElementById("all-adjustments-code");
+      const fb = document.getElementById("alphabet-feedback");
+
+      if (box) {
+        box.style.display = "block";
+        box.value = codeText;
+        box.focus();
+        box.select();
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(codeText).then(() => {
+          fb.className = "feedback ok";
+          fb.textContent = "Gesamter Code für alle Buchstaben angezeigt & kopiert!";
+        }).catch(() => {
+          fb.className = "feedback ok";
+          fb.textContent = "Gesamter Code für alle Buchstaben angezeigt – jetzt kopierbar!";
+        });
+      } else {
+        fb.className = "feedback ok";
+        fb.textContent = "Gesamter Code für alle Buchstaben angezeigt – jetzt kopierbar!";
+      }
+    }
+
+    function bindAdjustTouchButtons() {
+      document.querySelectorAll("#adjust-panel .mini-btn").forEach((btn) => {
+        if (btn.dataset.touchBound) return;
+        btn.dataset.touchBound = "1";
+        btn.addEventListener("pointerdown", (e) => {
+          const attr = btn.getAttribute("onclick");
+          if (attr && attr.includes("adjustVariant")) {
+            e.preventDefault();
+            btn.click();
+          }
+        });
+      });
+    }
+
+    let activeLetterKeys = new Set(["A"]);
+    let currentLetterKey = "A";
+    let manualPickerVariant = "upper";
+    let penOnlyMode = false;
+    let activePointerId = null;
+    let hasDrawnStroke = false;
+    let isAdvancingLetter = false;
+
+    const templateImageCache = new Map();
+
+    const namenWoerter = [
+      "Katze", "Ball", "Baum", "Apfel", "Schule",
+      "Hund", "Haus", "Tisch", "Blume", "Buch",
+      "Stuhl", "Fenster", "Auto", "Bett", "Sonne",
+      "Mond", "Stern", "Wolke", "Regen", "Schnee",
+      "Vogel", "Fisch", "Pferd", "Kuh", "Schwein",
+      "Maus", "Fuchs", "Bär", "Wolf", "Eule",
+      "Brot", "Käse", "Milch", "Wasser", "Kuchen",
+      "Birne", "Banane", "Kirsche", "Erdbeere", "Zitrone",
+      "Mutter", "Vater", "Schwester", "Bruder", "Freund",
+      "Garten", "Wald", "Berg", "Fluss", "See"
+    ];
+
+    const tunWoerter = [
+      "laufen", "springen", "lachen", "malen", "singen",
+      "rennen", "lesen", "spielen", "schwimmen", "klettern",
+      "tanzen", "schlafen", "hüpfen", "basteln", "rufen",
+      "gehen", "kommen", "sehen", "hören", "essen",
+      "trinken", "schreiben", "rechnen", "fragen", "antworten",
+      "helfen", "suchen", "finden", "bauen", "öffnen",
+      "schließen", "ziehen", "drücken", "werfen", "fangen",
+      "fliegen", "fahren", "reiten", "tauchen", "kochen",
+      "backen", "putzen", "waschen", "weinen", "träumen",
+      "denken", "lernen", "winken", "klatschen", "zählen"
+    ];
+
+    function getLetterItem(key) {
+      return alphabetItems.find((item) => item.key === key) || alphabetItems[0];
+    }
+
+    function getVariantCandidates(item, variant) {
+      const candidates = [];
+      const addIfUnique = (p) => {
+        if (!candidates.includes(p)) candidates.push(p);
+      };
+
+      const exts = ["png", "PNG", "jpg", "jpeg", "JPG", "JPEG"];
+      const upperBase = item.upper;
+      const lowerBase = item.lower;
+
+      if (variant === "upper") {
+        const bases = [upperBase, upperBase.toLowerCase()];
+        if (item.key === "ß" || item.key === "ẞ") {
+          bases.push("ss", "SS");
+        }
+        for (const base of bases) {
+          for (const ext of exts) {
+            addIfUnique(`buchstaben/${base}_gross.${ext}`);
+            addIfUnique(`buchstaben/${base}.${ext}`);
+          }
+        }
+      } else {
+        const bases = [lowerBase.toUpperCase(), lowerBase];
+        for (const base of bases) {
+          for (const ext of exts) {
+            addIfUnique(`buchstaben/${base}_klein.${ext}`);
+            addIfUnique(`buchstaben/${base}.${ext}`);
+          }
+        }
+      }
+
+      return candidates;
+    }
+
+    function loadVariantImage(cacheKey, candidates) {
+      if (templateImageCache.has(cacheKey)) {
+        return templateImageCache.get(cacheKey);
+      }
+
+      const state = {
+        img: new Image(),
+        loaded: false,
+        failed: false,
+        matchedSrc: "",
+        triedSrc: candidates[0] || "",
+        idx: 0
+      };
+
+      function tryNext() {
+        if (state.idx >= candidates.length) {
+          state.failed = true;
+          updateSourceStatusUI();
+          if (document.getElementById("alphabet-section").style.display !== "none") {
+            drawWritingTemplate(false);
+          }
+          return;
+        }
+        const nextSrc = candidates[state.idx++];
+        state.triedSrc = nextSrc;
+        state.img.src = nextSrc;
+      }
+
+      state.img.onload = () => {
+        if (state.img.naturalWidth > 0 && state.img.naturalHeight > 0) {
+          state.loaded = true;
+          state.failed = false;
+          state.matchedSrc = state.triedSrc;
+          updateSourceStatusUI();
+          if (document.getElementById("alphabet-section").style.display !== "none") {
+            drawWritingTemplate(false);
+          }
+        } else {
+          tryNext();
+        }
+      };
+
+      state.img.onerror = () => {
+        tryNext();
+      };
+
+      templateImageCache.set(cacheKey, state);
+      tryNext();
+      return state;
+    }
+
+    function getLetterImages(key) {
+      const item = getLetterItem(key);
+      const upperState = loadVariantImage(`${key}:upper`, getVariantCandidates(item, "upper"));
+      const lowerState = item.hasLower
+        ? loadVariantImage(`${key}:lower`, getVariantCandidates(item, "lower"))
+        : null;
+      return { item, upperState, lowerState };
+    }
+
+    function updateSourceStatusUI() {
+      const lowerBtn = document.getElementById("btn-pick-lower");
+      const item = getLetterItem(currentLetterKey);
+      if (lowerBtn) {
+        lowerBtn.style.display = item.hasLower ? "inline-block" : "none";
+      }
+    }
+
+    function triggerManualImagePicker(variant = "upper") {
+      manualPickerVariant = variant;
+      const inp = document.getElementById("manual-letter-file");
+      if (inp) {
+        inp.value = "";
+        inp.click();
+      }
+    }
+
+    function handleManualLetterFile(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      const targetKey = currentLetterKey;
+      const targetVariant = manualPickerVariant;
+      img.onload = () => {
+        templateImageCache.set(`${targetKey}:${targetVariant}`, {
+          img,
+          loaded: true,
+          failed: false,
+          matchedSrc: `${file.name} (lokal gewählt)`,
+          triedSrc: file.name,
+          idx: 999
+        });
+        updateSourceStatusUI();
+        drawWritingTemplate(false);
+      };
+      img.src = url;
+    }
+
+    function preloadAllTemplateImages() {
+      alphabetItems.forEach((item) => {
+        getLetterImages(item.key);
+      });
+    }
+
+    function shuffleArray(arr) {
+      const copy = arr.slice();
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function buildGermanTask(expectedType) {
+      const isNamen = expectedType === "namen";
+      const targetPool = shuffleArray(isNamen ? namenWoerter : tunWoerter);
+      const distractorPool = shuffleArray(isNamen ? tunWoerter : namenWoerter);
+
+      const totalCount = 6;
+      const targetCount = Math.floor(Math.random() * 5) + 1;
+      const distractorCount = totalCount - targetCount;
+
+      const items = [
+        ...targetPool.slice(0, targetCount).map((text) => ({
+          text,
+          type: expectedType
+        })),
+        ...distractorPool.slice(0, distractorCount).map((text) => ({
+          text,
+          type: isNamen ? "tun" : "namen"
+        }))
+      ];
+
+      return {
+        expectedType,
+        title: isNamen
+          ? "Welche Wörter sind NAMENWÖRTER (Nomen)?"
+          : "Welche Wörter sind TUN-WÖRTER (Verben)?",
+        words: shuffleArray(items)
+      };
+    }
+
+    function renderStats() {
+      document.getElementById("stars").textContent = stars;
+      document.getElementById("streak").textContent = streak;
+    }
+
+    function updateStats(correct) {
+      if (correct) {
+        stars += 1;
+        streak += 1;
+      } else {
+        streak = 0;
+      }
+      renderStats();
+    }
+
+    function resetStarsAndStreak() {
+      const confirmed = window.confirm("Sterne und Serie wirklich auf 0 zurücksetzen?");
+      if (!confirmed) return;
+
+      stars = 0;
+      streak = 0;
+      renderStats();
+      document.getElementById("math-feedback").textContent = "";
+      document.getElementById("german-feedback").textContent = "";
+      document.getElementById("alphabet-feedback").textContent = "";
+    }
+
+    function switchTab(tab) {
+      document.getElementById("tab-math").classList.toggle("active", tab === "math");
+      document.getElementById("tab-german").classList.toggle("active", tab === "german");
+      document.getElementById("tab-alphabet").classList.toggle("active", tab === "alphabet");
+
+      document.getElementById("math-section").style.display = tab === "math" ? "block" : "none";
+      document.getElementById("german-section").style.display = tab === "german" ? "block" : "none";
+      document.getElementById("alphabet-section").style.display = tab === "alphabet" ? "block" : "none";
+
+      if (tab === "german") renderGerman();
+      if (tab === "alphabet") {
+        isAdvancingLetter = false;
+        activePointerId = null;
+        document.getElementById("alphabet-feedback").textContent = "";
+        updatePenModeUI();
+        updateAdjustPanelUI();
+        syncSelectAllButtonState();
+        drawWritingTemplate(false);
+      }
+    }
+
+    function setAnswerMode(mode) {
+      answerMode = mode;
+      document.getElementById("mode-choice").classList.toggle("active", mode === "choice");
+      document.getElementById("mode-input").classList.toggle("active", mode === "input");
+
+      document.getElementById("math-options").style.display = mode === "choice" ? "grid" : "none";
+      document.getElementById("math-input-box").style.display = mode === "input" ? "flex" : "none";
+
+      if (mode === "input") {
+        const inp = document.getElementById("math-user-input");
+        inp.value = "";
+        inp.focus();
+      }
+    }
+
+    function setGermanCategory(cat) {
+      germanCategory = cat;
+      document.getElementById("cat-namen").classList.toggle("active", cat === "namen");
+      document.getElementById("cat-tun").classList.toggle("active", cat === "tun");
+      document.getElementById("cat-mix").classList.toggle("active", cat === "mix");
+      renderGerman();
+    }
+
+    function getSortedActiveRows() {
+      return Array.from(activeRows).sort((a, b) => a - b);
+    }
+
+    function updateExtraButtonsUI() {
+      document.getElementById("btn-mix-pm").classList.toggle("active", mixPlusMinusEnabled);
+    }
+
+    function toggleMixPlusMinus() {
+      mixPlusMinusEnabled = !mixPlusMinusEnabled;
+      updateExtraButtonsUI();
+      nextMathQuestion();
+    }
+
+    function buildRowButtons() {
+      const container = document.getElementById("row-selector");
+      container.innerHTML = "";
+
+      for (let r = 1; r <= 10; r++) {
+        const btn = document.createElement("button");
+        const isActive = activeRows.has(r);
+        btn.className = "row-btn" + (isActive ? " active" : "");
+        btn.textContent = r + "er-Reihe";
+        btn.onclick = () => {
+          if (activeRows.has(r)) {
+            if (activeRows.size > 1) {
+              activeRows.delete(r);
+            }
+          } else {
+            activeRows.add(r);
+          }
+          buildRowButtons();
+          nextMathQuestion();
+        };
+        container.appendChild(btn);
+      }
+    }
+
+    function getSortedActiveLetters() {
+      return alphabetItems
+        .map((item) => item.key)
+        .filter((key) => activeLetterKeys.has(key));
+    }
+
+    function updateAlphabetInfo() {
+      const chosen = getSortedActiveLetters();
+      const current = getLetterItem(currentLetterKey);
+      const summary = chosen.length === alphabetItems.length ? "Alle" : chosen.join(", ");
+      document.getElementById("alphabet-selected-info").textContent =
+        `Ausgewählt: ${summary} — Aktuell: ${current.label}`;
+      updateAdjustPanelUI();
+    }
+
+    function syncSelectAllButtonState() {
+      const btn = document.getElementById("btn-select-all-letters");
+      if (!btn) return;
+      const allSelected = activeLetterKeys.size === alphabetItems.length;
+      btn.classList.toggle("active", allSelected);
+    }
+
+    function buildLetterButtons() {
+      const container = document.getElementById("letter-selector");
+      container.innerHTML = "";
+
+      alphabetItems.forEach((item) => {
+        const btn = document.createElement("button");
+        const isActive = activeLetterKeys.has(item.key);
+        btn.className = "letter-btn" + (isActive ? " active" : "");
+        btn.textContent = item.key;
+        btn.type = "button";
+        btn.onclick = () => {
+          if (activeLetterKeys.has(item.key)) {
+            if (activeLetterKeys.size > 1) {
+              activeLetterKeys.delete(item.key);
+              if (currentLetterKey === item.key) {
+                currentLetterKey = getSortedActiveLetters()[0];
+              }
+            }
+          } else {
+            activeLetterKeys.add(item.key);
+            currentLetterKey = item.key;
+          }
+          isAdvancingLetter = false;
+          document.getElementById("alphabet-feedback").textContent = "";
+          buildLetterButtons();
+          syncSelectAllButtonState();
+          drawWritingTemplate(true);
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function selectAllLetters() {
+      const allSelected = activeLetterKeys.size === alphabetItems.length;
+      if (allSelected) {
+        const keepKey = currentLetterKey || alphabetItems[0].key;
+        activeLetterKeys = new Set([keepKey]);
+        currentLetterKey = keepKey;
+      } else {
+        activeLetterKeys = new Set(alphabetItems.map((item) => item.key));
+      }
+      isAdvancingLetter = false;
+      document.getElementById("alphabet-feedback").textContent = "";
+      buildLetterButtons();
+      syncSelectAllButtonState();
+      drawWritingTemplate(true);
+    }
+
+    function pickRandomLetter() {
+      const chosen = getSortedActiveLetters();
+      if (chosen.length === 0) return;
+      isAdvancingLetter = false;
+      currentLetterKey = chosen[Math.floor(Math.random() * chosen.length)];
+      document.getElementById("alphabet-feedback").textContent = "";
+      drawWritingTemplate(true);
+    }
+
+    function stepToNextLetterOnly() {
+      const chosen = getSortedActiveLetters();
+      if (chosen.length === 0) return;
+      const idx = chosen.indexOf(currentLetterKey);
+      const nextIdx = (idx + 1) % chosen.length;
+      currentLetterKey = chosen[nextIdx];
+      isAdvancingLetter = false;
+      document.getElementById("alphabet-feedback").textContent = "";
+      drawWritingTemplate(true);
+    }
+
+    function prevAlphabetLetter() {
+      const chosen = getSortedActiveLetters();
+      if (chosen.length === 0) return;
+      const idx = chosen.indexOf(currentLetterKey);
+      const prevIdx = (idx - 1 + chosen.length) % chosen.length;
+      isAdvancingLetter = false;
+      currentLetterKey = chosen[prevIdx];
+      document.getElementById("alphabet-feedback").textContent = "";
+      drawWritingTemplate(true);
+    }
+
+    function handleNextAlphabetLetter() {
+      if (isAdvancingLetter) return;
+      const fb = document.getElementById("alphabet-feedback");
+      const item = getLetterItem(currentLetterKey);
+
+      if (hasDrawnStroke) {
+        isAdvancingLetter = true;
+        updateStats(true);
+        hasDrawnStroke = false;
+        fb.className = "feedback ok";
+        fb.textContent = `Super! ${item.label} geübt (+1 Stern)`;
+        setTimeout(() => {
+          stepToNextLetterOnly();
+        }, 700);
+      } else {
+        stepToNextLetterOnly();
+      }
+    }
+
+    const writeCanvas = document.getElementById("write-canvas");
+    const writeCtx = writeCanvas.getContext("2d");
+
+    const strokeCanvas = document.createElement("canvas");
+    strokeCanvas.width = writeCanvas.width;
+    strokeCanvas.height = writeCanvas.height;
+    const strokeCtx = strokeCanvas.getContext("2d");
+
+    function updatePenModeUI() {
+      const btn = document.getElementById("btn-pen-only");
+      const tip = document.getElementById("alphabet-writing-tip");
+      if (btn) {
+        btn.textContent = penOnlyMode ? "Nur Stift: An" : "Nur Stift: Aus";
+        btn.classList.toggle("active-mode", penOnlyMode);
+      }
+      if (tip) {
+        tip.textContent = penOnlyMode
+          ? "Stift-Modus aktiv: Finger und Handballen werden ignoriert."
+          : "Handballen-Schutz aktiv: Zweite Berührungen stören den Strich nicht.";
+      }
+    }
+
+    function togglePenOnlyMode() {
+      penOnlyMode = !penOnlyMode;
+      activePointerId = null;
+      writeCanvas._lastPt = null;
+      updatePenModeUI();
+    }
+
+    function syncCanvasSizeWithLayout() {
+      const rect = writeCanvas.getBoundingClientRect();
+      const targetWidth = Math.max(320, Math.round(rect.width || 640));
+      const targetHeight = Math.max(160, Math.round(rect.height || 240));
+
+      if (writeCanvas.width !== targetWidth || writeCanvas.height !== targetHeight) {
+        const tempStroke = document.createElement("canvas");
+        tempStroke.width = strokeCanvas.width;
+        tempStroke.height = strokeCanvas.height;
+        tempStroke.getContext("2d").drawImage(strokeCanvas, 0, 0);
+
+        writeCanvas.width = targetWidth;
+        writeCanvas.height = targetHeight;
+        strokeCanvas.width = targetWidth;
+        strokeCanvas.height = targetHeight;
+
+        strokeCtx.clearRect(0, 0, targetWidth, targetHeight);
+        strokeCtx.drawImage(tempStroke, 0, 0, targetWidth, targetHeight);
+      }
+    }
+
+    function fitImageIntoBox(img, maxW, maxH) {
+      const aspect = img.naturalWidth / img.naturalHeight;
+      let drawW = Math.round(maxH * aspect);
+      let drawH = maxH;
+      if (drawW > maxW) {
+        drawW = maxW;
+        drawH = Math.round(drawW / aspect);
+      }
+      return { drawW, drawH };
+    }
+
+    function drawWritingTemplate(resetStrokes = true) {
+      updateAlphabetInfo();
+      syncCanvasSizeWithLayout();
+
+      if (resetStrokes) {
+        strokeCtx.clearRect(0, 0, strokeCanvas.width, strokeCanvas.height);
+        hasDrawnStroke = false;
+      }
+
+      const w = writeCanvas.width;
+      const h = writeCanvas.height;
+
+      writeCtx.clearRect(0, 0, w, h);
+      writeCtx.fillStyle = "#ffffff";
+      writeCtx.fillRect(0, 0, w, h);
+
+      const topLine = Math.round(h * 0.20);
+      const midLine = Math.round(h * 0.47);
+      const baseLine = Math.round(h * 0.72);
+      const descenderLine = Math.round(h * 0.90);
+
+      writeCtx.save();
+      writeCtx.lineWidth = 1.5;
+
+      writeCtx.strokeStyle = "#cbd5e1";
+      writeCtx.setLineDash([]);
+      writeCtx.beginPath();
+      writeCtx.moveTo(16, topLine);
+      writeCtx.lineTo(w - 16, topLine);
+      writeCtx.moveTo(16, baseLine);
+      writeCtx.lineTo(w - 16, baseLine);
+      writeCtx.stroke();
+
+      writeCtx.strokeStyle = "#94a3b8";
+      writeCtx.setLineDash([6, 6]);
+      writeCtx.beginPath();
+      writeCtx.moveTo(16, midLine);
+      writeCtx.lineTo(w - 16, midLine);
+      writeCtx.moveTo(16, descenderLine);
+      writeCtx.lineTo(w - 16, descenderLine);
+      writeCtx.stroke();
+      writeCtx.restore();
+
+      const { item, upperState, lowerState } = getLetterImages(currentLetterKey);
+      updateSourceStatusUI();
+
+      const upperAdj = getAdjFor(currentLetterKey, "upper");
+      const lowerAdj = getAdjFor(currentLetterKey, "lower");
+
+      const mainHeight = Math.max(24, baseLine - topLine);
+      const smallToDescenderHeight = Math.max(24, descenderLine - midLine);
+
+      const hasUpper = upperState && upperState.loaded && upperState.img.naturalWidth > 0;
+      const hasLower = item.hasLower && lowerState && lowerState.loaded && lowerState.img.naturalWidth > 0;
+
+      if (hasUpper || hasLower) {
+        writeCtx.save();
+        writeCtx.globalCompositeOperation = "multiply";
+        writeCtx.globalAlpha = 0.78;
+
+        if (!item.hasLower && hasUpper) {
+          const targetH = Math.round(mainHeight * 1.32 * upperAdj.scale);
+          const offsetY = Math.round((upperAdj.offsetY * h) / 240);
+          const { drawW, drawH } = fitImageIntoBox(upperState.img, w - 48, targetH);
+          const drawX = Math.round((w - drawW) / 2);
+          const drawY = Math.round(baseLine - drawH + offsetY);
+          writeCtx.drawImage(upperState.img, 0, 0, upperState.img.naturalWidth, upperState.img.naturalHeight, drawX, drawY, drawW, drawH);
+        } else {
+          const leftCenterX = Math.round(w * 0.25);
+          const rightCenterX = Math.round(w * 0.75);
+          const slotMaxW = Math.round(w * 0.28);
+
+          if (hasUpper) {
+            const targetH = Math.round(mainHeight * 1.32 * upperAdj.scale);
+            const offsetY = Math.round((upperAdj.offsetY * h) / 240);
+            const { drawW, drawH } = fitImageIntoBox(upperState.img, slotMaxW, targetH);
+            const drawX = Math.round(leftCenterX - drawW / 2);
+            const drawY = Math.round(baseLine - drawH + offsetY);
+            writeCtx.drawImage(upperState.img, 0, 0, upperState.img.naturalWidth, upperState.img.naturalHeight, drawX, drawY, drawW, drawH);
+          }
+
+          if (hasLower) {
+            const targetH = Math.round(smallToDescenderHeight * 1.05 * lowerAdj.scale);
+            const offsetY = Math.round((lowerAdj.offsetY * h) / 240);
+            const { drawW, drawH } = fitImageIntoBox(lowerState.img, slotMaxW, targetH);
+            const drawX = Math.round(rightCenterX - drawW / 2);
+            const drawY = Math.round(midLine + offsetY);
+            writeCtx.drawImage(lowerState.img, 0, 0, lowerState.img.naturalWidth, lowerState.img.naturalHeight, drawX, drawY, drawW, drawH);
+          }
+        }
+
+        writeCtx.restore();
+      } else {
+        writeCtx.save();
+        writeCtx.fillStyle = "#64748b";
+        writeCtx.font = `600 14px -apple-system, sans-serif`;
+        writeCtx.textAlign = "center";
+        writeCtx.textBaseline = "middle";
+        writeCtx.fillText(
+          `Keine Bilder für "${currentLetterKey}" gefunden — in „Feinjustierung einblenden“ „Groß-Bild wählen“ / „Klein-Bild wählen“ nutzen`,
+          w / 2,
+          (topLine + baseLine) / 2
+        );
+        writeCtx.restore();
+      }
+
+      writeCtx.drawImage(strokeCanvas, 0, 0);
+    }
+
+    function clearWritingCanvas() {
+      isAdvancingLetter = false;
+      activePointerId = null;
+      writeCanvas._lastPt = null;
+      document.getElementById("alphabet-feedback").textContent = "";
+      drawWritingTemplate(true);
+    }
+
+    function getCanvasPoint(evt) {
+      const rect = writeCanvas.getBoundingClientRect();
+      const scaleX = writeCanvas.width / rect.width;
+      const scaleY = writeCanvas.height / rect.height;
+      return {
+        x: (evt.clientX - rect.left) * scaleX,
+        y: (evt.clientY - rect.top) * scaleY
+      };
+    }
+
+    function isAllowedPointerType(evt) {
+      if (penOnlyMode) {
+        return evt.pointerType === "pen";
+      }
+      return true;
+    }
+
+    function drawSegment(prev, pt) {
+      strokeCtx.save();
+      strokeCtx.strokeStyle = "#0f172a";
+      strokeCtx.lineWidth = 10;
+      strokeCtx.lineCap = "round";
+      strokeCtx.lineJoin = "round";
+      strokeCtx.beginPath();
+      strokeCtx.moveTo(prev.x, prev.y);
+      strokeCtx.lineTo(pt.x, pt.y);
+      strokeCtx.stroke();
+      strokeCtx.restore();
+
+      writeCtx.save();
+      writeCtx.strokeStyle = "#0f172a";
+      writeCtx.lineWidth = 10;
+      writeCtx.lineCap = "round";
+      writeCtx.lineJoin = "round";
+      writeCtx.beginPath();
+      writeCtx.moveTo(prev.x, prev.y);
+      writeCtx.lineTo(pt.x, pt.y);
+      writeCtx.stroke();
+      writeCtx.restore();
+    }
+
+    writeCanvas.addEventListener("pointerdown", (evt) => {
+      if (!isAllowedPointerType(evt)) {
+        evt.preventDefault();
+        return;
+      }
+      if (activePointerId !== null && activePointerId !== evt.pointerId) {
+        evt.preventDefault();
+        return;
+      }
+
+      evt.preventDefault();
+      activePointerId = evt.pointerId;
+      try {
+        writeCanvas.setPointerCapture(evt.pointerId);
+      } catch (e) {}
+      hasDrawnStroke = true;
+      document.getElementById("alphabet-feedback").textContent = "";
+
+      const pt = getCanvasPoint(evt);
+      drawSegment(pt, pt);
+      writeCanvas._lastPt = pt;
+    });
+
+    writeCanvas.addEventListener("pointermove", (evt) => {
+      if (activePointerId === null || evt.pointerId !== activePointerId) {
+        if (penOnlyMode || activePointerId !== null) evt.preventDefault();
+        return;
+      }
+      evt.preventDefault();
+      hasDrawnStroke = true;
+      const pt = getCanvasPoint(evt);
+      const prev = writeCanvas._lastPt || pt;
+      drawSegment(prev, pt);
+      writeCanvas._lastPt = pt;
+    });
+
+    function stopDrawing(evt) {
+      if (activePointerId === null) return;
+      if (evt && evt.pointerId !== activePointerId) return;
+      const finishedId = activePointerId;
+      activePointerId = null;
+      writeCanvas._lastPt = null;
+      if (evt && writeCanvas.hasPointerCapture && writeCanvas.hasPointerCapture(finishedId)) {
+        try {
+          writeCanvas.releasePointerCapture(finishedId);
+        } catch (e) {}
+      }
+    }
+
+    writeCanvas.addEventListener("pointerup", stopDrawing);
+    writeCanvas.addEventListener("pointercancel", stopDrawing);
+    writeCanvas.addEventListener("touchstart", (e) => {
+      if (penOnlyMode) e.preventDefault();
+    }, { passive: false });
+
+    window.addEventListener("resize", () => {
+      if (document.getElementById("alphabet-section").style.display !== "none") {
+        drawWritingTemplate(false);
+      }
+    });
+
+    function formatRowMultiplication(row, multiplier) {
+      return `${multiplier} · ${row}`;
+    }
+
+    function nextMathQuestion() {
+      let hintText = "";
+      const chosenRows = getSortedActiveRows();
+      const row = chosenRows[Math.floor(Math.random() * chosenRows.length)];
+      const rowsSummary = chosenRows.map((r) => `${r}er`).join(", ");
+
+      if (mixPlusMinusEnabled) {
+        const multiplier = Math.floor(Math.random() * 6) + 1;
+        const multLabel = formatRowMultiplication(row, multiplier);
+        const multProduct = row * multiplier;
+        const isPlus = Math.random() > 0.4;
+        const addSub = Math.floor(Math.random() * 9) + 1;
+
+        if (isPlus) {
+          currentLabel = `${multLabel} + ${addSub}`;
+          currentAnswer = multProduct + addSub;
+          hintText = `Tipp: Zuerst ${multLabel} = ${multProduct}, dann + ${addSub}`;
+        } else {
+          const safeSub = Math.min(addSub, multProduct - 1);
+          const finalSub = safeSub < 1 ? 1 : safeSub;
+          currentLabel = `${multLabel} - ${finalSub}`;
+          currentAnswer = multProduct - finalSub;
+          hintText = `Tipp: Zuerst ${multLabel} = ${multProduct}, dann - ${finalSub}`;
+        }
+
+        document.getElementById("math-order-info").textContent =
+          `Gemischt mit +/- (${rowsSummary})`;
+      } else {
+        const multiplier = Math.floor(Math.random() * 10) + 1;
+
+        currentLabel = formatRowMultiplication(row, multiplier);
+        currentAnswer = row * multiplier;
+        hintText = `${multiplier} × die ${row}er-Reihe`;
+
+        document.getElementById("math-order-info").textContent =
+          `Reihe (${rowsSummary})`;
+      }
+
+      document.getElementById("math-question").textContent = `${currentLabel} = ?`;
+      document.getElementById("math-hint").textContent = hintText;
+      document.getElementById("math-feedback").textContent = "";
+
+      const choices = new Set([currentAnswer]);
+      while (choices.size < 4) {
+        const offset = Math.floor(Math.random() * 9) - 4;
+        const candidate = currentAnswer + offset;
+        if (candidate > 0 && candidate <= 100) {
+          choices.add(candidate);
+        }
+      }
+
+      const shuffled = Array.from(choices).sort(() => Math.random() - 0.5);
+      const optionsEl = document.getElementById("math-options");
+      optionsEl.innerHTML = "";
+
+      shuffled.forEach((val) => {
+        const btn = document.createElement("button");
+        btn.className = "opt-btn";
+        btn.textContent = val;
+        btn.onclick = () => {
+          btn.blur();
+          evaluateAnswer(val);
+        };
+        optionsEl.appendChild(btn);
+      });
+
+      const inputEl = document.getElementById("math-user-input");
+      inputEl.value = "";
+      if (answerMode === 'input') {
+        inputEl.focus();
+      }
+    }
+
+    function checkMathInput() {
+      const inputEl = document.getElementById("math-user-input");
+      const val = parseInt(inputEl.value.trim(), 10);
+      if (isNaN(val)) return;
+
+      inputEl.value = "";
+      inputEl.focus();
+
+      evaluateAnswer(val);
+    }
+
+    document.getElementById("math-user-input").addEventListener("keyup", function(e) {
+      if (e.key === "Enter") {
+        checkMathInput();
+      }
+    });
+
+    function evaluateAnswer(val) {
+      const fb = document.getElementById("math-feedback");
+      if (val === currentAnswer) {
+        updateStats(true);
+        fb.className = "feedback ok";
+        fb.textContent = `Super! ${currentLabel} = ${currentAnswer} (+1 Stern)`;
+        setTimeout(nextMathQuestion, 900);
+      } else {
+        updateStats(false);
+        fb.className = "feedback no";
+        fb.textContent = `Fast! Versuch es bei ${currentLabel} noch einmal.`;
+      }
+    }
+
+    function clearWordResultClasses() {
+      const buttons = document.querySelectorAll("#german-words .word-btn");
+      buttons.forEach((btn) => {
+        btn.classList.remove("wrong-pick", "missed-right");
+      });
+    }
+
+    function pickGermanTask() {
+      if (germanCategory === "namen") {
+        return buildGermanTask("namen");
+      }
+      if (germanCategory === "tun") {
+        return buildGermanTask("tun");
+      }
+      const expectedType = mixStep % 2 === 0 ? "namen" : "tun";
+      mixStep += 1;
+      return buildGermanTask(expectedType);
+    }
+
+    function renderGerman() {
+      if (germanAdvanceTimer) {
+        clearTimeout(germanAdvanceTimer);
+        germanAdvanceTimer = null;
+      }
+      germanRoundChecked = false;
+      currentGermanTask = pickGermanTask();
+      selectedWordIndices.clear();
+      document.getElementById("german-instruction").textContent = currentGermanTask.title;
+      document.getElementById("german-feedback").textContent = "";
+
+      const checkBtn = document.getElementById("german-check-btn");
+      if (checkBtn) {
+        checkBtn.disabled = false;
+      }
+
+      const grid = document.getElementById("german-words");
+      grid.innerHTML = "";
+      currentGermanTask.words.forEach((w, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "word-btn";
+        btn.textContent = w.text;
+        btn.disabled = false;
+        btn.onclick = () => {
+          if (germanRoundChecked) return;
+          clearWordResultClasses();
+          document.getElementById("german-feedback").textContent = "";
+          if (selectedWordIndices.has(idx)) {
+            selectedWordIndices.delete(idx);
+            btn.classList.remove("selected");
+          } else {
+            selectedWordIndices.add(idx);
+            btn.classList.add("selected");
+          }
+        };
+        grid.appendChild(btn);
+      });
+    }
+
+    function checkGerman() {
+      if (!currentGermanTask || germanRoundChecked) return;
+
+      const fb = document.getElementById("german-feedback");
+      if (selectedWordIndices.size === 0) {
+        clearWordResultClasses();
+        fb.className = "feedback no";
+        fb.textContent = "Bitte wähle zuerst mindestens ein Wort aus!";
+        return;
+      }
+
+      germanRoundChecked = true;
+      const checkBtn = document.getElementById("german-check-btn");
+      if (checkBtn) {
+        checkBtn.disabled = true;
+      }
+
+      const expectedType = currentGermanTask.expectedType;
+
+      const expectedIndices = new Set(
+        currentGermanTask.words
+          .map((w, i) => (w.type === expectedType ? i : -1))
+          .filter((i) => i !== -1)
+      );
+
+      const missedRightWords = currentGermanTask.words
+        .map((w, i) => (!selectedWordIndices.has(i) && expectedIndices.has(i) ? w.text : null))
+        .filter(Boolean);
+
+      const exactMatch =
+        selectedWordIndices.size === expectedIndices.size &&
+        Array.from(expectedIndices).every((i) => selectedWordIndices.has(i));
+
+      const buttons = document.querySelectorAll("#german-words .word-btn");
+      clearWordResultClasses();
+
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        const isPicked = selectedWordIndices.has(idx);
+        const isRight = expectedIndices.has(idx);
+        if (isPicked && !isRight) {
+          btn.classList.add("wrong-pick");
+        } else if (!isPicked && isRight) {
+          btn.classList.add("missed-right");
+        }
+      });
+
+      if (exactMatch) {
+        updateStats(true);
+        fb.className = "feedback ok";
+        fb.textContent = "Richtig gemacht! (+1 Stern)";
+        germanAdvanceTimer = setTimeout(renderGerman, 1500);
+      } else {
+        updateStats(false);
+        fb.className = "feedback no";
+        if (missedRightWords.length > 0) {
+          fb.textContent = `Rot = falsch gewählt, Grün umrandet = nicht gewählt (${missedRightWords.join(", ")}). Gleich kommt die nächste Aufgabe!`;
+        } else {
+          fb.textContent = "Rot = falsch gewählt. Gleich kommt die nächste Aufgabe!";
+        }
+        germanAdvanceTimer = setTimeout(renderGerman, 2600);
+      }
+    }
+
+    buildRowButtons();
+    buildLetterButtons();
+    updateExtraButtonsUI();
+    setAnswerMode('choice');
+    nextMathQuestion();
+    preloadAllTemplateImages();
+    updatePenModeUI();
+    updateAdjustPanelUI();
+    bindAdjustTouchButtons();
+    syncSelectAllButtonState();
+    drawWritingTemplate(true);
+  </script>
+</body>
+</html>
